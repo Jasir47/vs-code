@@ -1,0 +1,127 @@
+
+<html lang="en">
+    <style>
+        table{
+            font-family: arial,sans-serif;
+            border-collapse: collapse;
+            width: 100%;}
+        td,th{
+            border: 1px solid #cccccc;
+            padding : 10px}
+        th{
+            font-weight: bold;
+            text-transform: uppercase;}
+    </style>
+<head>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DASHBOARD</title>
+
+</head>
+
+<body>
+    <div>
+        <h1>DASHBOARD</h1>
+        <form>
+            <label for="channel">CHANNEL    :</label>
+            <input type="text" id="channel" name="channel" placeholder="Channel Name"><br>
+            <label for="startDate">START DATE :</label>
+            <input type="text" id="startDate" name="startDate" placeholder="YYYY-MM-DD"><br>
+            <label for="endDate">END DATE    :</label>
+            <input type="text" id="endDate" name="endDate" placeholder="YYYY-MM-DD"><br>
+            <label for="size">SIZE          :</label>
+            <input type="text" id="size" name="size" placeholder="SIZE"><br>
+            <label for="page">PAGE          :</label>
+            <input type="text" id="page" name="page" placeholder="PAGE"><br>
+        </form>
+        <hr>
+        <button onclick="getData()">SUBMIT</button>
+        <hr>
+        <h1>REPORTS</h1>
+        <p>TOTAL PAGES  : <span id="tp"></span><br>
+            TOTAL ITEMS  : <span id="ti"></span><br>
+            CURRENT PAGE : <span id="cp"></span></p>
+            <br>
+        <table>
+            <thead>
+                <tr>
+                    <th>createdBy</th>
+                    <th>creationDate</th> 
+                    <th>lastModifiedBy</th> 
+                    <th>lastModifiedDate</th> 
+                    <th>source</th>  
+                    <th>hospital</th>
+                    <th>requestId</th> 
+                    <!--<th>metadata</th> -->
+                    <th>sender</th>  
+                    <th>receiver</th> 
+                    <th>sendDate</th> 
+                    <th>sendTime</th>
+                    <th>messageType</th>  
+                    <th>id</th>  
+                    <!-- <th>messageText</th> --> 
+                    <!-- <th>mediaBucket</th> -->
+                    <!-- <th>mediaKey</th> -->
+                    <th>status</th>
+                    <th>errorMessage</th>
+                    <!-- <th>values</th> -->
+                    <th> sid</th>
+                </tr>
+            </thead>
+            <tbody id="tableData"></tbody>
+        </table>
+        <script>
+        getData();
+        async function getData(){
+            let channel = document.getElementById('channel').value;
+            let startDate = document.getElementById('startDate').value;
+            let endDate = document.getElementById('endDate').value;
+            let size = document.getElementById('size').value;
+            let page = document.getElementById('page').value;
+            
+            const api_url ="http://localhost:8080/logs/" + channel+ "/getAllReports?" 
+            + "startDate="+startDate
+		    +"&endDate="+endDate
+		    + "&size="+size
+			+ "&page="+page ;
+            
+            const response = await fetch(api_url)
+            const datas= await response.json();
+            const{totalPages,totalItems,currentPage} = datas;
+            
+            document.getElementById('tp').textContent = totalPages;
+            document.getElementById('ti').textContent = totalItems;
+            document.getElementById('cp').textContent = currentPage;
+        
+            let sortDirection = false;
+            let reports = datas.reports;
+
+            const tableBody = document.getElementById('tableData');
+            let dataHtml = '';
+            for(let rep of reports){
+                dataHtml += `<tr><td>${rep.createdBy}</td>
+                    <td>${rep.creationDate}</td></tr>
+                    <td>${rep.lastModifiedBy}</td>
+                    <td>${rep.lastModifiedDate}</td>
+                    <td>${rep.source}</td>
+                    <td>${rep.hospital}</td>
+                    <td>${rep.requestId}</td>
+                    <td>${rep.sender}</td>
+                    <td>${rep.receiver}</td>
+                    <td>${rep.sendDate}</td>
+                    <td>${rep.sendTime}</td>
+                    <td>${rep.messageType}</td>
+                    <td>${rep.id}</td>
+                    <td>${rep.status}</td>
+                    <td>${rep.errorMessage}</td>
+                    <td>${rep.sid}</td>`
+                }
+                tableBody.innerHTML = dataHtml;
+            }
+            </script>
+            </div>
+        </body>
+        </html>
