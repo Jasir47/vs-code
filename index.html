@@ -7,7 +7,7 @@
             width: 100%;}
         td,th{
             border: 1px solid #cccccc;
-            padding : 10px}
+            padding : 5px}
         th{
             font-weight: bold;
             text-transform: uppercase;}
@@ -26,8 +26,8 @@
     <div>
         <h1>DASHBOARD</h1>
         <form>
-            <label for="channel">CHANNEL    :</label>
-            <input type="text" id="channel" name="channel" placeholder="Channel Name"><br>
+            <label for="channel">CHANNEL :</label>
+            <input type="text" id="channel" name="channel" placeholder="CHANNEL"><br>
             <label for="startDate">START DATE :</label>
             <input type="text" id="startDate" name="startDate" placeholder="YYYY-MM-DD"><br>
             <label for="endDate">END DATE    :</label>
@@ -60,12 +60,12 @@
                     <th>receiver</th> 
                     <th>sendDate</th> 
                     <th>sendTime</th>
-                    <th>messageType</th>  
-                    <th>id</th>  
+                    <th>messageType</th> 
+                    <th>id</th> 
                     <!-- <th>messageText</th> --> 
                     <!-- <th>mediaBucket</th> -->
                     <!-- <th>mediaKey</th> -->
-                    <th>status</th>
+                    <th>status</th> 
                     <th>errorMessage</th>
                     <!-- <th>values</th> -->
                     <th> sid</th>
@@ -74,7 +74,7 @@
             <tbody id="tableData"></tbody>
         </table>
         <script>
-        getData();
+        
         async function getData(){
             let channel = document.getElementById('channel').value;
             let startDate = document.getElementById('startDate').value;
@@ -96,14 +96,13 @@
             document.getElementById('ti').textContent = totalItems;
             document.getElementById('cp').textContent = currentPage;
         
-            let sortDirection = false;
             let reports = datas.reports;
 
             const tableBody = document.getElementById('tableData');
             let dataHtml = '';
             for(let rep of reports){
                 dataHtml += `<tr><td>${rep.createdBy}</td>
-                    <td>${rep.creationDate}</td></tr>
+                    <td>${rep.creationDate}</td>
                     <td>${rep.lastModifiedBy}</td>
                     <td>${rep.lastModifiedDate}</td>
                     <td>${rep.source}</td>
@@ -117,7 +116,8 @@
                     <td>${rep.id}</td>
                     <td>${rep.status}</td>
                     <td>${rep.errorMessage}</td>
-                    <td>${rep.sid}</td>`
+                    <td>${rep.sid}</td>
+                    </tr>`
                 }
                 tableBody.innerHTML = dataHtml;
             }
